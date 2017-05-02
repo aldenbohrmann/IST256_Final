@@ -37,7 +37,7 @@ for row in table.find_all('table'):
     event.append(column_3)
 
     column_4 = col[3].string.strip()
-    # and append it to last_name variable
+    # and append it to location variable
     location.append(column_4)
 
     columns = {'date': date, 'sport': sport, 'event': event, 'location': location}
