@@ -1,32 +1,49 @@
-from bs4 import BeautifulSoup
-import urllib2
 import requests
+from bs4 import BeautifulSoup
 import pandas as pd
 
+# Create a values as dictionary of lists
+
 url = "http://www.topendsports.com/events/calendar-2017.htm"
+
+# Scrape the HTML at the url
 r = requests.get(url)
-data = r.text
-soup = BeautifulSoup(data, "html.parser")
 
-soup.find_all("list")
-table = soup.find_all("list")
-rows = table.find_all('tr')
+# Turn the HTML into a Beautiful Soup object
+soup = BeautifulSoup(r.text, "html.parser")
 
-data = {
-    'date' : [],
-    'sport' : [],
-    'event' : [],
-    'location' : []
-}
-for row in rows:
-    cols = row.find_all("tr")
-    data['date'].append( cols[0].get_text() )
-    data['sport'].append( cols[1].get_text() )
-    data['event'].append( cols[2].get_text() )
-    data['location'].append( cols[3].get_text() )
+date = []
+sport = []
+event = []
+location = []
+columns = {}
 
-sport_data = pd.DataFrame( data )
-sport_data.to_csv("2017 Sports Schedule.csv")
+table = soup.find('table')
 
+for row in table.find_all('table'):
+    # Create a variable of all the <td> tag pairs in each <tr> tag pair,
+    col = row.find_all('td')[:0]
 
-print(data)
+    column_1 = col[0].string.strip()
+    # and append it to date variable
+    date.append(column_1)
+
+    column_2 = col[1].string.strip()
+    # and append it to sport variable
+    sport.append(column_2)
+
+    column_3 = col[2].string.strip()
+    # and append it to event variable
+    event.append(column_3)
+
+    column_4 = col[3].string.strip()
+    # and append it to last_name variable
+    location.append(column_4)
+
+    columns = {'date': date, 'sport': sport, 'event': event, 'location': location}
+
+    df = pd.DataFrame(columns)
+
+    print(df)
+
+print(table)
