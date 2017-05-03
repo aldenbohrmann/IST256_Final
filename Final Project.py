@@ -7,15 +7,19 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import wikipedia
+import re
 
 
 # Make sure user input is a valid year, if the year is not valid, ask for another year.
+print("\n")
+print("Welcome to the Major Leauge Sports Calander Search \n")
+
 while True:
-    try:
-        user_input_year = int(input("Enter Year (2011-2021): "))
+    user_input_year = int(input("Enter Sports Schedule Year (2011-2021): "))
+    if 2011 <= user_input_year <= 2021:
         break
-    except NameError, AttributeError:
-        print("WOAH! That was no valid year. Please try again...")
+    else:
+        print("Sorry that year is not within 2011 and 2021, Please Try Again!")
 
 
 # If a nunmber assigns user_input_year to year variable
@@ -63,19 +67,25 @@ pd.set_option('display.expand_frame_repr', False)
 print(df)
 
 # search sport input
-sport_search = raw_input("Type sport to filter: ")
 # Find sport in dataframe, column 'sport
 
-sport_df = df[df['sport'] == sport_search]
 
+while True:
+    sport_search = raw_input("Type sport to filter: ")
+    sport_df = df[df['sport'] == sport_search]
+    if sport_df.empty:
+        print("Not a Valid Sport, Please Try Again!")
+    else:
+        print(sport_df)
+        break
 # sport_df print statement for panda dataframe, df
-print(sport_df)
-# search event input
+
 event_search = raw_input("Search event on wikipedia: ")
-# Find event in dataframe, column 'event'
 event_df = sport_df[sport_df['event'] == event_search]
+
+# Find event in dataframe, column 'event'
 # event_df print statement for panda dataframe, df
 
 wiki_find = wikipedia.page(event_search)
 wiki_find.content
-print "Here is what Wikipedia has to say about your sporting event: \n", "\n", wikipedia.summary(event_search)
+print "\n", "Here is what Wikipedia has to say about your sporting event: \n", "\n", wikipedia.summary(event_search)
