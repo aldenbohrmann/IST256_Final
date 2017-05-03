@@ -6,13 +6,15 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import wikipedia
+
 
 # Make sure user input is a valid year, if the year is not valid, ask for another year.
 while True:
     try:
         user_input_year = int(input("Enter Year (2011-2021): "))
         break
-    except NameError, ValueError:
+    except NameError, AttributeError:
         print("WOAH! That was no valid year. Please try again...")
 
 
@@ -32,7 +34,7 @@ rows = table.findAll('tr')
 # Create new blank list name data
 data = []
 # Names of columns, also know as headers in HTML
-header = ['DATE', 'SPORT', 'EVENT', 'LOCATION']
+header = ['date', 'sport', 'event', 'location']
 
 
 data = [[td.findChildren(text=True) for td in tr.findAll("td")] for tr in rows]
@@ -42,17 +44,38 @@ data = data[1:]
 # Function to get the value, x, and handle the errors
 def get_value(x):
     try:
-        return x[0]
+        return x[0].lower()
     except (TypeError, IndexError):
         return ''
 
 # Apply function to each column to get the value out of the list
 # Assigns df to create the panda dataframe
 df = pd.DataFrame(data, columns=header)
-df['DATE'] = df['DATE'].apply(get_value)
-df['SPORT'] = df['SPORT'].apply(get_value)
-df['EVENT'] = df['EVENT'].apply(get_value)
-df['LOCATION'] = df['LOCATION'].apply(get_value)
+df['date'] = df['date'].apply(get_value)
+df['sport'] = df['sport'].apply(get_value)
+df['event'] = df['event'].apply(get_value)
+df['location'] = df['location'].apply(get_value)
 
-# Final print statement for panda dataframe, df
-print (df)
+# Prevents dataframe from outputting onto different lines depending on screensize
+pd.set_option('display.expand_frame_repr', False)
+
+# completed table print statement for panda dataframe, df
+print(df)
+
+# search sport input
+sport_search = raw_input("Type sport to filter: ")
+# Find sport in dataframe, column 'sport
+
+sport_df = df[df['sport'] == sport_search]
+
+# sport_df print statement for panda dataframe, df
+print(sport_df)
+# search event input
+event_search = raw_input("Search event on wikipedia: ")
+# Find event in dataframe, column 'event'
+event_df = sport_df[sport_df['event'] == event_search]
+# event_df print statement for panda dataframe, df
+
+wiki_find = wikipedia.page(event_search)
+wiki_find.content
+print "Here is what Wikipedia has to say about your sporting event: \n", "\n", wikipedia.summary(event_search)
