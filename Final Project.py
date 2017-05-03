@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# Make sure user input is a valid year
+# Make sure user input is a valid year, if the year is not valid, ask for another year.
 while True:
     try:
         user_input_year = int(input("Enter Year (2011-2021): "))
