@@ -27,11 +27,20 @@ import wikipedia #wikipedia API
 # Banner
 print("\n") #new line
 print("Welcome to the Major Leauge Sports Calander Search \n") #banner
+print("**Learn more about the sporting events in a given year!**\n") #banner
 
 # Check to see if the year is between 2011 and 2012
 
 while True:
-    user_input_year = int(input("Enter Sports Schedule Year (2011-2021): "))
+
+
+    try:
+        user_input_year = raw_input("Enter Sports Schedule Year (2011-2021): ")
+        val = int(user_input_year)
+        break
+    except ValueError:
+        print("Sorry that year is not valid, Please Try Again!")
+
     if 2011 <= user_input_year <= 2021:
         break
     else:
@@ -45,7 +54,7 @@ soup = BeautifulSoup(r.text, "html.parser") #turn the HTML into a Beautiful Soup
 table = soup.find('table') #find the table in the HTML code
 rows = table.findAll('tr') #in the element table, find all 'tr' tags
 data = [] #create new blank list name data
-header = ['date', 'sport', 'event', 'location'] #names of columns, also know as headers in HTML
+header = ['DATE', 'SPORT', 'EVENT', 'LOCATION'] #names of columns, also know as headers in HTML
 
 data = [[td.findChildren(text=True) for td in tr.findAll("td")] for tr in rows] #find all 'tr'/'td' tags
 data = data[1:] #first row is blank, so get rid of it
@@ -53,7 +62,7 @@ data = data[1:] #first row is blank, so get rid of it
 # Value
 def get_value(x): #function to get the value, x, and handle the errors
     try:
-        return x[0].lower()
+        return x[0]
     except (TypeError, IndexError):
         return ''
 
@@ -61,10 +70,10 @@ def get_value(x): #function to get the value, x, and handle the errors
 # Apply function to each column to get the value out of the list
 # Assigns df to create the panda dataframe
 df = pd.DataFrame(data, columns=header)
-df['date'] = df['date'].apply(get_value)
-df['sport'] = df['sport'].apply(get_value)
-df['event'] = df['event'].apply(get_value)
-df['location'] = df['location'].apply(get_value)
+df['DATE'] = df['DATE'].apply(get_value)
+df['SPORT'] = df['SPORT'].apply(get_value)
+df['EVENT'] = df['EVENT'].apply(get_value)
+df['LOCATION'] = df['LOCATION'].apply(get_value)
 
 # Dataframe Format
 pd.set_option('display.expand_frame_repr', False) #prevents dataframe from outputting onto different lines depending on screensize
@@ -76,8 +85,8 @@ print("\n")
 
 # Sport Search
 while True:
-    sport_search = raw_input("Enter sport from list to filter: ") #user input for sport search filter
-    sport_df = df[df['sport'] == sport_search] #check to see if sport exists in dataframe
+    sport_search = raw_input("Enter sport from list to filter: ").title() #user input for sport search filter
+    sport_df = df[df['SPORT'] == sport_search] #check to see if sport exists in dataframe
     if sport_df.empty:
         print("Not a Valid Sport, Please Try Again!")
     else:
@@ -86,23 +95,27 @@ while True:
 
 # Event Search
 while True:
-    event_search = raw_input("Search event on wikipedia: ")  #user input for sport search filter
-    event_df = sport_df[sport_df['event'] == event_search] #check to see if sport exists in dataframe
+    event_search = raw_input("Search event on wikipedia: ").title()  #user input for sport search filter
+    event_df = sport_df[sport_df['EVENT'] == event_search] #check to see if sport exists in dataframe
     if event_df.empty:
-        print("Not a Valid Event, Please Try Again!")
+        print("Not a Valid Event, Please Try Again (Hint: If the event starts with UPPERCASE letters use that! [ex: FIFA])")
     else:
         break
 
 # Event Search
-print("\n")#user input for search on wikipedia of sporting event
-event_df = sport_df[sport_df['event'] == event_search] #find event in dataframe, column 'event'
+print("\n") #print line
+event_df = sport_df[sport_df['EVENT'] == event_search] #find event in dataframe, column 'event'
 
 # Wikipedia API
 wiki_find = wikipedia.page(event_search) #find event that was searched by user on wikipedia
+wiki_find.sections
+wiki_find.title
+wiki_find.sections
 wiki_find.content # extract the content
 
+
 # Wikipedia Print
-print "\n", "Here is what Wikipedia has to say about your sporting event: \n", "\n", wikipedia.summary(event_search, "\n") # print wikipedia findings from user search
+print "\n", "Here is what Wikipedia has to say about your sporting event: \n", wikipedia.summary(event_search, "\n") # print wikipedia findings from user search
 print("\n")
 print("Thanks for using the Major Leauge Sports Calander Search")
 print("\n")
