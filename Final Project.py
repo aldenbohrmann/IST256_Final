@@ -108,14 +108,11 @@ event_df = sport_df[sport_df['EVENT'] == event_search] #find event in dataframe,
 
 # Wikipedia API
 wiki_find = wikipedia.page(event_search) #find event that was searched by user on wikipedia
-wiki_find.sections
-wiki_find.title
-wiki_find.sections
 wiki_find.content # extract the content
 
 
 # Wikipedia Print
-print "\n", "Here is what Wikipedia has to say about your sporting event: \n", wikipedia.summary(event_search, "\n") # print wikipedia findings from user search
+print(wikipedia.summary(event_search)) # print wikipedia findings from user search
 print("\n")
 print("Thanks for using the Major Leauge Sports Calander Search")
 print("\n")
