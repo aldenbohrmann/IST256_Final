@@ -29,9 +29,7 @@ print("\n") #new line
 print("Welcome to the Major Leauge Sports Calander Search \n") #banner
 print("**Learn more about specific sporting events in a given year!**\n") #banner
 
-# Check to see if the year is between 2011 and 2012
-
-
+# Check to see if the year is between 2011 and 2012 and a valid year
 def get_input():
     user_input_year = raw_input("Enter Sports Schedule Year (2011-2021): ")
     try:
@@ -45,10 +43,9 @@ def get_input():
         print("Sorry that year is not valid, Please Try Again!")
         get_input()
 
+year = get_input() #year assigned to function get_input
 
-year = get_input()
 # BeautifulSoup
-# year = user_input_year#if a nunmber assigns user_input_year to year variable
 url = "http://www.topendsports.com/events/calendar-{y}.htm".format(y=year)#for whatever year the user inputs, {y}.fornmat will replace the year in the URL
 r = requests.get(url) #scrape the HTML at the url
 soup = BeautifulSoup(r.text, "html.parser") #turn the HTML into a Beautiful Soup object
