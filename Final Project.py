@@ -27,25 +27,28 @@ import wikipedia #wikipedia API
 # Banner
 print("\n") #new line
 print("Welcome to the Major Leauge Sports Calander Search \n") #banner
-print("**Learn more about the sporting events in a given year!**\n") #banner
+print("**Learn more about specific sporting events in a given year!**\n") #banner
 
 # Check to see if the year is between 2011 and 2012
 
-while True:
 
-
+def get_input():
+    user_input_year = raw_input("Enter Sports Schedule Year (2011-2021): ")
     try:
-        user_input_year = raw_input("Enter Sports Schedule Year (2011-2021): ")
         val = int(user_input_year)
-        break
+        if 2011 <= val <= 2021:
+            return val
+        else:
+            print("Sorry that year is not valid, Please Try Again!")
+            get_input()
     except ValueError:
         print("Sorry that year is not valid, Please Try Again!")
+        get_input()
 
 
-        print("Sorry that year is not within 2011 and 2021, Please Try Again!")
-
+year = get_input()
 # BeautifulSoup
-year = user_input_year#if a nunmber assigns user_input_year to year variable
+# year = user_input_year#if a nunmber assigns user_input_year to year variable
 url = "http://www.topendsports.com/events/calendar-{y}.htm".format(y=year)#for whatever year the user inputs, {y}.fornmat will replace the year in the URL
 r = requests.get(url) #scrape the HTML at the url
 soup = BeautifulSoup(r.text, "html.parser") #turn the HTML into a Beautiful Soup object
@@ -96,7 +99,8 @@ while True:
     event_search = raw_input("Enter event title EXACTLY as it is looks find out more: ")  #user input for sport search filter
     event_df = sport_df[sport_df['EVENT'] == event_search] #check to see if sport exists in dataframe
     if event_df.empty:
-        print("Not a Valid Event, Please Try Again (Hint: If the event starts with UPPERCASE letters use that! [ex: FIFA])")
+        print("Not a Valid Event, Please Try Again (Hint: If the event starts with UPPERCASE letters use that! [ex: FIFA]")
+        print("\n")
     else:
         break
 
