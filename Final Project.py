@@ -41,9 +41,7 @@ while True:
     except ValueError:
         print("Sorry that year is not valid, Please Try Again!")
 
-    if 2011 <= user_input_year <= 2021:
-        break
-    else:
+
         print("Sorry that year is not within 2011 and 2021, Please Try Again!")
 
 # BeautifulSoup
@@ -95,7 +93,7 @@ while True:
 
 # Event Search
 while True:
-    event_search = raw_input("Search event on wikipedia: ").title()  #user input for sport search filter
+    event_search = raw_input("Enter event title EXACTLY as it is looks find out more: ")  #user input for sport search filter
     event_df = sport_df[sport_df['EVENT'] == event_search] #check to see if sport exists in dataframe
     if event_df.empty:
         print("Not a Valid Event, Please Try Again (Hint: If the event starts with UPPERCASE letters use that! [ex: FIFA])")
@@ -112,7 +110,8 @@ wiki_find.content # extract the content
 
 
 # Wikipedia Print
-print(wikipedia.summary(event_search)) # print wikipedia findings from user search
+wiki_final_output = (wikipedia.summary(event_search)) # print wikipedia findings from user search
+print(wiki_final_output)
 print("\n")
 print("Thanks for using the Major Leauge Sports Calander Search")
 print("\n")
